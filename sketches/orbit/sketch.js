@@ -7,11 +7,11 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   background(0, 0, 0);
 
-  attractor = new Attractor(width/2, height/2, 900);
+  attractor = new Attractor(width/2, height/2, 1000);
   orbiters = [numOrbiting];
 
   for (let i = 0; i < numOrbiting; i++) {
-    orbiters[i] = new Orbiter(random(0, width), random(0, height), random(-30, -30), random(80, 200));
+    orbiters[i] = new Orbiter(random(0, width), random(0, height), random(-30, -30), random(50, 250));
   }
 }
 
