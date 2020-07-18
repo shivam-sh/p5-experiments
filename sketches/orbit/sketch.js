@@ -1,5 +1,5 @@
 // A simple simulation to practice working with vectors in p5.js
-// This code is a customized version of the gravitational orbit ecanple created by Dan Schiffman
+// This code is a customized version of the gravitational orbit example created by Dan Schiffman
 
 var numOrbiting = 10;
 
