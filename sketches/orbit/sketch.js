@@ -4,25 +4,33 @@
 var numOrbiting = 10;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+
+  let canvasDiv = document.getElementById('sketch');
+  let width = canvasDiv.offsetWidth;
+  let height = canvasDiv.offsetHeight;
+  let canvas = createCanvas(width, height);
+  canvas.parent('sketch');
+  
   background(0, 0, 0);
-
-  attractor = new Attractor(width/2, height/2, 1000);
+  
+  attractor = new Attractor(0, 0, 1000);
   orbiters = [numOrbiting];
-
+  
   for (let i = 0; i < numOrbiting; i++) {
-    orbiters[i] = new Orbiter(random(0, width), random(0, height), random(-30, -30), random(50, 250));
+    orbiters[i] = new Orbiter(random(-width/2, width/2), random(-height/2, height/2), random(-30, -30), random(height/10, height/3));
   }
 }
 
 function draw() {
-  background(0, 0, 0, 30);
+  translate(width/2, height/2); 
 
+  background(0, 0, 0, 30);
+  
   for (let i = 0; i < numOrbiting; i++) {
     attractor.attract(orbiters[i]);
     orbiters[i].update();
   }
-
+  
   for (let i = 0; i < numOrbiting; i++) {
     if (orbiters[i].pos.z >= 0) {
       orbiters[i].show();
@@ -31,5 +39,29 @@ function draw() {
       attractor.show();
       orbiters[i].show();
     }
+  }
+}
+
+function windowResized() {
+  let canvasDiv = document.getElementById('sketch');
+  let width = canvasDiv.offsetWidth;
+  let height = canvasDiv.offsetHeight;
+  let canvas = createCanvas(width, height);
+  canvas.parent('sketch');
+  
+  background(0, 0, 0);
+  
+  attractor.pos(createVector(0, 0))
+  
+}
+
+function mousePressed() {
+  let canvasDiv = document.getElementById('sketch');
+  let width = canvasDiv.offsetWidth;
+  let height = canvasDiv.offsetHeight;
+  
+  if (width == window.innerWidth && mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
+    let fs = fullscreen();
+    fullscreen(!fs);
   }
 }
