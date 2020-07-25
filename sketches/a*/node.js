@@ -99,14 +99,14 @@ class MapNode {
 		let xOffset = (width % this.width) / 2;
 		let yOffset = (height % this.height) / 2;
 
-		strokeWeight(1);
+		strokeWeight(2);
 		stroke(0);
 		rect(
 			this.column * this.width + xOffset,
 			this.row * this.height + yOffset,
 			this.width,
 			this.height,
-			3
+			4
 		);
 	}
 

@@ -2,8 +2,8 @@
 let percentFilled = 20;
 
 // Values for graphical output
-let nodeHeight = 10;
-let nodeWidth = 10;
+let nodeHeight = 30;
+let nodeWidth = 30;
 
 // GLOBAL VARIABLES
 let queue = [];
