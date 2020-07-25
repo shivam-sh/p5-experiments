@@ -64,7 +64,12 @@ function setup() {
 	finish.setState(states.FINISH);
 
 	start.g = 0;
-	start.h = dist(start.column * nodeWidth, start.row * nodeHeight, finish.column * nodeWidth, finish.row * nodeHeight);
+	start.h = dist(
+		start.column * nodeWidth,
+		start.row * nodeHeight,
+		finish.column * nodeWidth,
+		finish.row * nodeHeight
+	);
 	start.f = start.g + start.h;
 
 	// Add the start node to the queue
@@ -79,9 +84,67 @@ function setup() {
 }
 
 function draw() {
-	if (queue.length < 0) {
+	if (queue.length > 0) {
 		// Run main search loop
+		let currentNode = queue[0];
+		let newNodes = currentNode.getConnections(grid);
+
+		// Check if done
+		if (currentNode == finish) {
+			while (currentNode.cameFrom != undefined) {
+				currentNode.setState(states.SUCCESS);
+				currentNode.show();
+				currentNode = currentNode.cameFrom;
+			}
+			start.setState(states.SUCCESS);
+			start.show();
+		} else {
+			// Remove current node from queue
+			currentNode.setState(states.CLOSED);
+			currentNode.show();
+			closed.push(currentNode);
+			queue.shift();
+
+			// Insert each connection into the queue according to its f value
+			newNodes.forEach((node) => {
+				// Check if this is the quickest path to this node
+				let tempG =
+					currentNode.g +
+					dist(
+						currentNode.column * nodeWidth,
+						currentNode.row * nodeHeight,
+						node.column * nodeWidth,
+						node.row * nodeHeight
+					);
+
+				if (tempG < node.g) {
+					node.h = dist(
+						node.column * nodeWidth,
+						node.row * nodeHeight,
+						finish.column * nodeWidth,
+						finish.row * nodeHeight
+					);
+					node.cameFrom = currentNode;
+					node.g = tempG;
+					node.f = node.g + node.h;
+				}
+
+				// Add the node to the queue and sort
+				queue.push(node);
+				queue.sort((a, b) => a.f - b.f);
+				node.setState(states.QUEUED);
+				node.show();
+			});
+		}
 	} else if (start.state != states.SUCCESS) {
 		// Search failed
+		for (let x = 0; x < columns; x++) {
+			for (let y = 0; y < rows; y++) {
+				if (grid[x][y].state == states.CLOSED) {
+					grid[x][y].setState(states.FAILED);
+					grid[x][y].show();
+				}
+			}
+		}
 	}
 }
