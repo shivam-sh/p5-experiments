@@ -3,6 +3,20 @@ let percentFilled = 30;
 let nodeHeight = 30;
 let nodeWidth = 30;
 
+function heuristic(node) {
+	// Calculate the theoretical shortest distance to the finish
+	let distance = dist(
+		node.column * nodeWidth,
+		node.row * nodeHeight,
+		finish.column * nodeWidth,
+		finish.row * nodeHeight
+	);
+
+	// Return a slight underestimate of the actual distance to the finish
+	// (Returning an overestimate would reduce the chances of finding the shortest path greatly)
+	return (distance + (distance * percentFilled) / 100) * 0.85;
+}
+
 // GLOBAL VARIABLES
 let queue = [];
 let closed = [];
@@ -10,6 +24,9 @@ let closed = [];
 let grid;
 let columns;
 let rows;
+
+let start;
+let finish;
 
 function setup() {
 	// Code to create an adaptive canvas
@@ -64,12 +81,7 @@ function setup() {
 	finish.setState(states.FINISH);
 
 	start.g = 0;
-	start.h = dist(
-		start.column * nodeWidth,
-		start.row * nodeHeight,
-		finish.column * nodeWidth,
-		finish.row * nodeHeight
-	);
+	start.h = heuristic(start);
 	start.f = start.g + start.h;
 
 	// Add the start node to the queue
@@ -118,12 +130,7 @@ function draw() {
 					);
 
 				if (tempG < node.g) {
-					node.h = dist(
-						node.column * nodeWidth,
-						node.row * nodeHeight,
-						finish.column * nodeWidth,
-						finish.row * nodeHeight
-					);
+					node.h = heuristic(node);
 					node.cameFrom = currentNode;
 					node.g = tempG;
 					node.f = node.g + node.h;
