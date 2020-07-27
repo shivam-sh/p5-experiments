@@ -1,6 +1,7 @@
 const states = {
 	OPEN: "open",
 	BLOCKED: "blocked",
+	START: "start-node",
 	GOAL: "goal-node",
 	QUEUED: "queued",
 	CLOSED: "closed",
@@ -28,7 +29,7 @@ class MapNode {
 		this.height = h;
 		this.state = state;
 	}
-	
+
 	// Draws the visual representation of a node
 	show() {
 		switch (this.state) {
@@ -38,8 +39,11 @@ class MapNode {
 			case states.BLOCKED:
 				fill(50, 50, 50);
 				break;
+			case states.START:
+				fill(100, 100, 250);
+				break;
 			case states.FINISH:
-				fill(100, 100, 200);
+				fill(100, 100, 250);
 				break;
 			case states.QUEUED:
 				fill(255, 200, 100);
@@ -68,8 +72,7 @@ class MapNode {
 			this.column * this.width + xOffset,
 			this.row * this.height + yOffset,
 			this.width,
-			this.height,
-			0
+			this.height
 		);
 	}
 

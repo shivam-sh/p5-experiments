@@ -1,5 +1,5 @@
 // Grid Options
-let percentFilled = 30;
+let percentFilled = 40;
 let nodeHeight = 30;
 let nodeWidth = 30;
 
@@ -75,9 +75,9 @@ function setup() {
 	}
 
 	// Set/init start and end points
-	start = grid[0][0];
-	finish = grid[columns - 1][rows - 1];
-	start.setState(states.OPEN);
+	start = grid[floor(columns / 10)][floor(rows / 10)];
+	finish = grid[columns - floor(columns / 10)][rows - floor(rows / 10)];
+	start.setState(states.START);
 	finish.setState(states.FINISH);
 
 	start.g = 0;
@@ -102,7 +102,7 @@ function draw() {
 		let newNodes = currentNode.getConnections(grid);
 
 		// Check if done
-		if (currentNode == finish) {
+		if (currentNode == finish && start.state != states.SUCCESS) {
 			while (currentNode.cameFrom != undefined) {
 				currentNode.setState(states.SUCCESS);
 				currentNode.show();
@@ -110,10 +110,12 @@ function draw() {
 			}
 			start.setState(states.SUCCESS);
 			start.show();
-		} else {
+		} else if (start.state != states.SUCCESS) {
 			// Remove current node from queue
-			currentNode.setState(states.CLOSED);
-			currentNode.show();
+			if (currentNode.state != states.START) {
+				currentNode.setState(states.CLOSED);
+				currentNode.show();
+			}
 			closed.push(currentNode);
 			queue.shift();
 
@@ -143,7 +145,7 @@ function draw() {
 				node.show();
 			});
 		}
-	} else if (start.state != states.SUCCESS) {
+	} else if (start.state != states.SUCCESS && start.state != states.FAILED) {
 		// Search failed
 		for (let x = 0; x < columns; x++) {
 			for (let y = 0; y < rows; y++) {
