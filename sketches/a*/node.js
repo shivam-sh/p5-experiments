@@ -60,14 +60,33 @@ class MapNode {
 		}
 
 		let canvasDiv = document.getElementById("canvas");
-		let width = canvasDiv.offsetWidth;
-		let height = canvasDiv.offsetHeight;
-
-		let xOffset = (width % this.width) / 2;
-		let yOffset = (height % this.height) / 2;
-
+		let canvasWidth = canvasDiv.offsetWidth;
+		let canvasHeight = canvasDiv.offsetHeight;
+		
 		strokeWeight(1);
 		stroke(0, 0, 0, 20);
+
+		this.width = nodeWidth;
+		this.height = nodeHeight;
+		
+		if (columns * this.width > canvasWidth) {
+			let scale = columns * nodeWidth / canvasWidth;
+			
+			this.width /= scale;
+			this.height /= scale;
+		}
+		if (rows * this.height > canvasHeight) {
+			this.width = nodeWidth;
+			this.height = nodeHeight;
+			
+			let scale = rows * nodeHeight / canvasHeight;
+			
+			this.width /= scale;
+			this.height /= scale;
+		}
+
+		let xOffset = (canvasWidth - this.width * columns) / 2;
+		let yOffset = (canvasHeight - this.height * rows) / 2;
 		rect(
 			this.column * this.width + xOffset,
 			this.row * this.height + yOffset,
