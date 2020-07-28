@@ -1,3 +1,10 @@
+/*
+ * A*
+ * Shivam Sh | https://github.com/shivam-sh
+ * 
+ * A demonstration of the A* pathfinding algorithm
+ */
+
 // Grid Options
 let percentFilled = 40;
 let nodeHeight = 30;
@@ -122,7 +129,7 @@ function draw() {
 
 			// Insert each connection into the queue according to its f value
 			newNodes.forEach((node) => {
-				// Check if this is the quickest path to this node
+				// Calculate the distance to this node (from the start)
 				let tempG =
 					currentNode.g +
 					dist(
@@ -132,10 +139,11 @@ function draw() {
 						node.row * nodeHeight
 					);
 
+				// Save this path if it is faster than any previous
 				if (tempG < node.g) {
-					node.h = heuristic(node);
 					node.cameFrom = currentNode;
 					node.g = tempG;
+					node.h = heuristic(node);
 					node.f = node.g + node.h;
 				}
 
@@ -159,10 +167,12 @@ function draw() {
 	}
 }
 
+// Reload the sketch if clicked
 function mousePressed() {
 	setup();
 }
 
+// Enter fullscreen if the canvas is on its display page and 'f' is pressed
 function keyPressed() {
 	let canvasDiv = document.getElementById("canvas");
 	let width = canvasDiv.offsetWidth;
@@ -173,6 +183,7 @@ function keyPressed() {
 	}
 }
 
+// Remake the canvas if it is resized
 function windowResized() {
 	let canvasDiv = document.getElementById("canvas");
 	let width = canvasDiv.offsetWidth;

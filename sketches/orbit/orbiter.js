@@ -1,6 +1,17 @@
+/*
+ * Orbit - orbiter.js
+ * Shivam Sh | https://github.com/shivam-sh
+ * 
+ * This file creates and manages an orbiter object
+ * which updates its position according to the forces applied to it
+ */
+
+// Options
 let showVectors = false
 
 class Orbiter {
+
+    // Create an orbiter based on position and mass
     constructor(x, y, z, m) {
         this.pos = createVector(x, y, z)
         this.vel = p5.Vector.random3D()
@@ -11,22 +22,29 @@ class Orbiter {
         this.size = 0;
     }
 
+    // Take in a force and apply it to the orbiter
     applyForce(f) {
         this.acc.set(f.div(this.mass))
     }
 
+    // Update the position and velocity of the object based on the forces applied to it
     update() {
         this.vel.add(this.acc)
         this.pos.add(this.vel)
     }
 
+    // Draw an ellipse to represent the position of the orbiter
     show() {
+        // Modify the radius of the orbiter according to its z position
         var distanceBasedRadius = this.rad * map(this.pos.z, -500, 500, 1, 4)
+
+        // Draw the actual orbiter
         fill(255)
         strokeWeight(2)
         stroke(255)
         ellipse(this.pos.x, this.pos.y, distanceBasedRadius)
 
+        // Draw vectors to represent the object's velocity/ acceleration
         if (showVectors) {
             strokeWeight(4)
             
